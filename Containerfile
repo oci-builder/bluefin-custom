@@ -20,6 +20,9 @@ FROM ghcr.io/ublue-os/bluefin:stable
 # RUN rm /opt && mkdir /opt
 
 ### MODIFICATIONS
+# Installs quickemu, qemu-kvm, edk2-ovmf (official Fedora packages from the
+# base image repos) and vivaldi-stable (vendor repo, GPG key pinned in
+# build_files/build.sh).
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
