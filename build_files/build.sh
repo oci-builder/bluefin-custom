@@ -4,6 +4,15 @@ set -ouex pipefail
 
 cp -avf "/ctx/system_files"/. /
 
+# Bluefin has /opt as a symlink to /var/opt (dangling in the container image).
+# Vivaldi unpacks to /opt/vivaldi, so replace it with a real directory, as
+# recommended by the image-template. akmods is unaffected (installs to
+# /lib/modules/<kver>/extra/).
+if [ -L /opt ] || [ ! -d /opt ]; then
+    rm -f /opt
+    mkdir -p /opt
+fi
+
 # Vivaldi: vendor repo with pinned GPG key.
 # The fingerprint check fails the build if the vendor key rotates, so a
 # silent key swap at repo.vivaldi.com never reaches the image.
