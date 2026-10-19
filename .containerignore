@@ -1,0 +1,12 @@
+# Keep local artifacts and signing keys out of the container build context
+.git/
+.github/
+*.key
+cosign.key
+cosign-backup.key
+output/
+*_build*
+*_chunkah_*
+*_rpm-ostree_*
+previous.manifest.json
+output.env
