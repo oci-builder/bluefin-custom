@@ -11,7 +11,9 @@ VIVALDI_GPG_URL="https://repo.vivaldi.com/archive/linux_signing_key.pub"
 VIVALDI_GPG_FPR="8D1FA52AEF58A09D889DD4221256C34716BD9233" # Vivaldi Package Composer KEY11, expires 2027-02-07
 
 curl -fsSL "$VIVALDI_GPG_URL" -o /tmp/vivaldi.asc
-test "$(gpg --show-keys --with-colons /tmp/vivaldi.asc | awk -F: '/^fpr/{print $10; exit}')" = "$VIVALDI_GPG_FPR"
+# Explicit homedir: /root is not writable by gpg in this image, /tmp is tmpfs here
+mkdir -p /tmp/gnupg
+test "$(gpg --homedir /tmp/gnupg --show-keys --with-colons /tmp/vivaldi.asc | awk -F: '/^fpr/{print $10; exit}')" = "$VIVALDI_GPG_FPR"
 mkdir -p /etc/pki/rpm-gpg
 install -m644 /tmp/vivaldi.asc /etc/pki/rpm-gpg/RPM-GPG-KEY-vivaldi
 rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-vivaldi
